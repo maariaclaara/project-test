@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orderss</title>
+  <link rel="icon" type="image/x-icon" href="/static/favicon.png">
+  <link rel="stylesheet" href="/static/bulma.min.css">
+</head>
+
+<body>
+  <nav class="navbar is-primary">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/">Home</a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="/orders">View Orders</a>
+        <a class="navbar-item" href="/orders/new">New Order</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="section">
+    <div class="container">
+
+      <h1 class="title">Registered Orders</h1>
+      <form method="get" action="/orders">
+        <div class="field is-grouped">
+          <p class="control">
+            <input class="input" type="text" name="name" placeholder="Search by name" value="{{ name }}">
+          </p>
+          <p class="control">
+            <input class="input" type="date" name="start_date" value="{{ start_date }}">
+          </p>
+          <p class="control">
+            <input class="input" type="date" name="end_date" value="{{ end_date }}">
+          </p>
+          <p class="control">
+            <button class="button is-info" type="submit">🔍 Filter</button>
+          </p>
+        </div>
+      </form>
+      <table class="table is-striped is-fullwidth">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+          <tr>
+            <td>{{ order.customer_name }}</td>
+            <td>{{ order.customer_email }}</td>
+            <td>{{ order.order_date | brazilian_date }}</td>
+            <td><a href="/orders/{{ order._id }}">🔎 Details</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <nav class="pagination" role="navigation" aria-label="pagination">
+        {% for p in range(1, total_pages + 1) %}
+        <a href="?page={{ p }}&name={{ name }}&start_date={{ start_date }}&end_date={{ end_date }}"
+          class="pagination-link {% if p == page %}is-current{% endif %}">{{ p }}</a>
+        {% endfor %}
+      </nav>
+
+    </div>
+  </section>
+</body>
+
+</html>

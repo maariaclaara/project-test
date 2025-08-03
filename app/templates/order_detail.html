@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Detail</title>
+  <link rel="icon" type="image/x-icon" href="/static/favicon.png">
+  <link rel="stylesheet" href="/static/bulma.min.css">
+</head>
+
+<body>
+  <nav class="navbar is-primary">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/">Home</a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="/orders">View Orders</a>
+        <a class="navbar-item" href="/orders/new">New Order</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="section">
+    <div class="container">
+
+      <h1 class="title">Order for {{ order.customer_name }}</h1>
+      <p><strong>Email:</strong> {{ order.customer_email }}</p>
+      <p><strong>Date:</strong> {{ order.order_date | brazilian_date }}</p>
+      <h2 class="subtitle">Items</h2>
+      <ul>
+        {% for item in order["items"] %}
+        <li>{{ item.name }} - {{ item.quantity }} x ${{ item.unit_price }}</li>
+        {% endfor %}
+      </ul>
+      <form method="post" action="/orders/{{ order._id }}/delete"
+        onsubmit="return confirm('Are you sure you want to delete this order?')">
+        <button class="button is-danger">Delete</button>
+      </form>
+
+    </div>
+  </section>
+</body>
+
+</html>
